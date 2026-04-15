@@ -1,0 +1,17 @@
+package com.proyecto.veterinaria.Repository;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.proyecto.veterinaria.Model.Cita;
+
+
+
+@Repository
+public interface CitaRepository extends JpaRepository<Cita, Long> {
+    Optional<Cita> findByFecha(LocalDateTime fecha);    
+    Optional<Cita> findByNombre(String nombre);
+}
