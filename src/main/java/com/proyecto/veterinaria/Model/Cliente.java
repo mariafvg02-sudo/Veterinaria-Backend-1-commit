@@ -1,8 +1,7 @@
 package com.proyecto.veterinaria.Model;
 
 import java.util.List;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.util.UUID;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -29,7 +28,7 @@ import lombok.Setter;
 public class Cliente{
     @Id
       @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idCliente;
+    private UUID idCliente;
   
 
     @Column(unique = true)
@@ -45,7 +44,6 @@ public class Cliente{
 
     /*Relacion de cliente con cita*/
     @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
     private List<Cita> cita;
 
 }
