@@ -8,10 +8,8 @@ import org.springframework.stereotype.Repository;
 
 import com.proyecto.veterinaria.Model.Cita;
 
-
-
 @Repository
 public interface CitaRepository extends JpaRepository<Cita, Long> {
     Optional<Cita> findByFecha(LocalDateTime fecha);    
-    Optional<Cita> findByNombre(String nombre);
+    Optional<Cita> findByMotivo(String motivo);
 }

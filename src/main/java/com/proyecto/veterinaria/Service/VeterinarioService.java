@@ -1,12 +1,13 @@
 package com.proyecto.veterinaria.Service;
 
-import com.proyecto.veterinaria.Model.Veterinario;
-import com.proyecto.veterinaria.Repository.VeterinarioRepository;
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import com.proyecto.veterinaria.Model.Veterinario;
+import com.proyecto.veterinaria.Repository.VeterinarioRepository;
 
 @Service
 public class VeterinarioService {
@@ -20,7 +21,7 @@ public class VeterinarioService {
     }
 
     // Obtener un veterinario por su ID
-    public Optional<Veterinario> obtenerPorId(long id) {
+    public Optional<Veterinario> obtenerPorId(Long id) {
         return veterinarioRepository.findById(id);
     }
 

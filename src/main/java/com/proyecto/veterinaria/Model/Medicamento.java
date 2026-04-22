@@ -1,7 +1,5 @@
 package com.proyecto.veterinaria.Model;
 
-import java.time.LocalDateTime;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,26 +13,26 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="Cita")
+@Table(name="medicamento")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cita {
+public class Medicamento {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idCita;
-    private LocalDateTime fecha;
-    private String motivo;
-    private String estado;
+    private long idMedicamento;
 
-    /*Relacion de la foranea de cita con cliente*/
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idCliente")
-    private Cliente cliente;
+    private String nombre;
 
-    /*Relacion de la foranea de cita con veterinario*/
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idVeterinario")
-    private Veterinario veterinario;
+    private String tipo;
 
+    private String descripcion;
+
+    private String dosis;
+
+    /* Relacion de medicamento con inventario (Llave foranea) */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "idInventarioMedicamento")
+    private InventarioMedicamento inventario;
 }

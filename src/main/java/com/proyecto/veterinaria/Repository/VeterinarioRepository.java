@@ -1,11 +1,16 @@
 package com.proyecto.veterinaria.Repository;
 
-import com.proyecto.veterinaria.Model.Veterinario;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import java.util.Optional;
+
+import com.proyecto.veterinaria.Model.Veterinario;
 
 @Repository
 public interface VeterinarioRepository extends JpaRepository<Veterinario, Long> {
     Optional<Veterinario> findByCorreo(String correo);
+    Optional<Veterinario> findByNombre(String nombre);
+    Optional<Veterinario> findByIdVeterinario(long idVeterinario);
+    Optional<Veterinario> findByDocumentoIdentidad(long documentoIdentidad);
 }

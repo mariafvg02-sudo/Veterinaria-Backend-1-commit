@@ -3,7 +3,6 @@ package com.proyecto.veterinaria.Service;
 import java.util.List;
 import java.util.Optional;
 
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,22 +21,22 @@ public class ClienteService {
     }
 
     // Buscar por ID
-    public Optional<Cliente> obtenerPorId(long id) {
+    public Optional<Cliente> obtenerPorId(Long id) {
         return clienteRepository.findById(id);
     }
 
-    // Buscar por email
+    // Buscar por correo
     public Optional<Cliente> obtenerPorCorreo(String correo) {
         return clienteRepository.findByCorreo(correo);
     }
 
-    // Crear cliente
+    // Registrar cliente
     public Cliente crearCliente(Cliente cliente) {
         return clienteRepository.save(cliente);
     }
 
     // Actualizar cliente
-    public Cliente actualizarCliente(long id, Cliente clienteActualizado) {
+    public Cliente actualizarCliente(Long id, Cliente clienteActualizado) {
         return clienteRepository.findById(id)
                 .map(cliente -> {
                     cliente.setNombre(clienteActualizado.getNombre());
@@ -50,7 +49,7 @@ public class ClienteService {
     }
 
     // Eliminar cliente
-    public void eliminarCliente(long id) {
+    public void eliminarCliente(Long id) {
         if (!clienteRepository.existsById(id)) {
             throw new RuntimeException("Cliente no encontrado");
         }

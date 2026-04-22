@@ -1,12 +1,19 @@
 package com.proyecto.veterinaria.Controller;
 
-import com.proyecto.veterinaria.Model.Cita;
-import com.proyecto.veterinaria.Service.CitaService;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.proyecto.veterinaria.Model.Cita;
+import com.proyecto.veterinaria.Service.CitaService;
 
 @RestController
 @RequestMapping("/api/citas")
@@ -18,6 +25,13 @@ public class CitaController {
     @GetMapping
     public List<Cita> listar() {
         return citaService.listarTodas();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Cita> obtenerPorId(@PathVariable Long id) {
+        return citaService.obtenerPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/agendar")
