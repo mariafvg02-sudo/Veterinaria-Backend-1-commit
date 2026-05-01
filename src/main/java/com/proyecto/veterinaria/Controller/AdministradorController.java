@@ -3,15 +3,9 @@ package com.proyecto.veterinaria.Controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.proyecto.veterinaria.Model.Administrador;
 import com.proyecto.veterinaria.Service.AdministradorService;
@@ -23,44 +17,53 @@ public class AdministradorController {
     @Autowired
     private AdministradorService administradorService;
 
-    // Obtener todos los administradores
+    // 🔹 Obtener todos (aunque solo habrá uno)
     @GetMapping
-    public List<Administrador> listarAdministradores() {
-        return administradorService.obtenerTodos();
+    public ResponseEntity<List<Administrador>> listarAdministradores() {
+        return ResponseEntity.ok(administradorService.obtenerTodos());
     }
 
-    // Obtener administrador por ID
+    // 🔹 Obtener administrador por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Administrador> obtenerPorId(@PathVariable Long id) {
-        return administradorService.obtenerPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
-
-    // Crear un nuevo administrador
-    @PostMapping
-    public ResponseEntity<Administrador> guardar(@RequestBody Administrador administrador) {
-        return ResponseEntity.ok(administradorService.guardar(administrador));
-    }
-
-    // Actualizar administrador
-    @PutMapping("/{id}")
-    public ResponseEntity<Administrador> actualizar(@PathVariable Long id, @RequestBody Administrador administrador) {
+    public ResponseEntity<?> obtenerPorId(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(administradorService.actualizar(id, administrador));
+            Administrador admin = administradorService.obtenerPorId(id);
+            return ResponseEntity.ok(admin);
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
     }
 
-    // Eliminar administrador
+    // 🔹 Crear administrador (solo uno permitido)
+    @PostMapping
+    public ResponseEntity<?> guardar(@RequestBody Administrador administrador) {
+        try {
+            Administrador nuevo = administradorService.guardar(administrador);
+            return ResponseEntity.status(HttpStatus.CREATED).body(nuevo);
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    // 🔹 Actualizar administrador
+    @PutMapping("/{id}")
+    public ResponseEntity<?> actualizar(@PathVariable Long id, @RequestBody Administrador administrador) {
+        try {
+            Administrador actualizado = administradorService.actualizar(id, administrador);
+            return ResponseEntity.ok(actualizado);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+        }
+    }
+
+    // 🔹 NO se permite eliminar administrador
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public ResponseEntity<?> eliminar(@PathVariable Long id) {
         try {
             administradorService.eliminar(id);
-            return ResponseEntity.noContent().build();
+            return ResponseEntity.ok("Operación no permitida");
         } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }

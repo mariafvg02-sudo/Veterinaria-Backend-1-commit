@@ -1,6 +1,7 @@
 package com.proyecto.veterinaria.Model;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -12,42 +13,44 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name="Cita")
+@Table(name = "entrada_historial")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cita {
+public class EntradaHistorial {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idCita;
-    private LocalDateTime fecha;
+    private Long id;
+
+    private LocalDate fecha;
+
+    private String diagnostico;
+
+    private String tratamiento;
+
+    private String nombre;
+
     private String motivo;
-    private String estado;
 
-    /*Relacion de la foranea de cita con cliente*/
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idCliente")
-    private Cliente cliente;
+    private String sintomas;
 
-    /*Relacion de la foranea de cita con veterinario*/
+    private String observaciones;
+
+    /* Relación: Muchas entradas de historial son registradas por un veterinario */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idVeterinario")
+    @JoinColumn(name = "id_veterinario")
     private Veterinario veterinario;
 
-    /*Relacion de la foranea de cita con recepcionista*/
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idRecepcionista")
-    private Recepcionista recepcionista;
-
-    /* Relacion bidireccional con Factura */
-    @OneToOne(mappedBy = "cita", cascade = CascadeType.ALL)
+    /* Relación bidireccional: Una entrada puede generar registros en el historial médico */
+    @OneToMany(mappedBy = "entradaHistorial", cascade = CascadeType.ALL)
     @JsonIgnore
-    private Factura factura;
+    private List<HistorialMedico> historiales;
 }

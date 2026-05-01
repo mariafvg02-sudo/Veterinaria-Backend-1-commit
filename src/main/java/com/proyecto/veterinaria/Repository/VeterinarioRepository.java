@@ -9,8 +9,8 @@ import com.proyecto.veterinaria.Model.Veterinario;
 
 @Repository
 public interface VeterinarioRepository extends JpaRepository<Veterinario, Long> {
-    Optional<Veterinario> findByCorreo(String correo);
     Optional<Veterinario> findByNombre(String nombre);
     Optional<Veterinario> findByIdVeterinario(long idVeterinario);
     Optional<Veterinario> findByDocumentoIdentidad(long documentoIdentidad);
+    boolean existsByCorreo(String correo);
 }

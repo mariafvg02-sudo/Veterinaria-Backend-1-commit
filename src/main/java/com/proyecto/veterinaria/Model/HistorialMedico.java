@@ -4,9 +4,12 @@ import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -36,11 +39,15 @@ public class HistorialMedico {
     @Column(name = "nombreVet", length = 30)
     private String nombreVet;
 
-    @Column(name = "ent_hist_id")
-    private Integer entHistId;
+    /* Relación: Un historial médico pertenece a una entrada de historial */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ent_hist_id")
+    private EntradaHistorial entradaHistorial;
 
-    @Column(name = "vet_id")
-    private Integer vetId;
+    /* Relación: Un historial médico está asociado a un veterinario */
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vet_id")
+    private Veterinario veterinario;
 
     @Column(name = "auxi_id")
     private Integer auxiId;

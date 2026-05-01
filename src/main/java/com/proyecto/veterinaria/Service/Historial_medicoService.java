@@ -36,6 +36,8 @@ public class Historial_medicoService {
             h.setDiagnostico(detalles.getDiagnostico());
             h.setTratamiento(detalles.getTratamiento());
             h.setNombreVet(detalles.getNombreVet());
+            h.setEntradaHistorial(detalles.getEntradaHistorial());
+            h.setVeterinario(detalles.getVeterinario());
             return historialRepository.save(h);
         }).orElseThrow(() -> new RuntimeException("Historial no encontrado"));
     }

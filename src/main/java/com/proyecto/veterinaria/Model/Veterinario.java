@@ -39,8 +39,25 @@ public class Veterinario {
 
     private String especialidad;
 
+    private String clave;
+
     /* Relacion de veterinario con citas */
-    @OneToMany(mappedBy = "veterinario", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "veterinario", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Cita> citas;
+
+    /* Relación de veterinario con las mascotas que atiende habitualmente */
+    @OneToMany(mappedBy = "veterinario", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Mascota> mascotas;
+
+    /* Relación: Un veterinario tiene múltiples entradas de historial registradas */
+    @OneToMany(mappedBy = "veterinario", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<EntradaHistorial> entradasHistorial;
+
+    /* Relación: Un veterinario tiene varios historiales médicos bajo su cargo */
+    @OneToMany(mappedBy = "veterinario", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<HistorialMedico> historialesMedicos;
 }

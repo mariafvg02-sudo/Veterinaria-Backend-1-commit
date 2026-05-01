@@ -20,4 +20,8 @@ public class Pago {
     private String metodo;
     private Double monto; // Usamos Double para el monto, podrías considerar BigDecimal para mayor precisión en aplicaciones financieras.
     private String estado; // Ejemplo: "COMPLETADO", "ANULADO"
+  //Relacón bidireccional de pago con factura 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "factu_id")
+    private Factura factura;
 }

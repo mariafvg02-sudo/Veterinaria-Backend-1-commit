@@ -43,4 +43,8 @@ public class Cliente{
     @JsonIgnore
     private List<Cita> citas;
 
+    /* Relación de cliente con sus mascotas */
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Mascota> mascotas;
 }

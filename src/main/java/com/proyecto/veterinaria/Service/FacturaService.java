@@ -35,7 +35,7 @@ public class FacturaService {
             f.setFechaHora(detalles.getFechaHora());
             f.setEstado(detalles.getEstado());
             f.setTotal(detalles.getTotal());
-            f.setCitaId(detalles.getCitaId());
+            f.setCita(detalles.getCita());
             return facturaRepository.save(f);
         }).orElseThrow(() -> new RuntimeException("Factura no encontrada"));
     }

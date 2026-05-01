@@ -7,5 +7,6 @@ import com.proyecto.veterinaria.Model.Administrador;
 
 @Repository
 public interface AdministradorRepository extends JpaRepository<Administrador, Long> {
-    // Aquí puedes añadir métodos de búsqueda personalizados si los necesitas
+   // 🔹 Validar si ya existe un correo
+    boolean existsByCorreo(String correo);
 }

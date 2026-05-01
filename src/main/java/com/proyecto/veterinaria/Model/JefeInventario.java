@@ -1,10 +1,17 @@
 package com.proyecto.veterinaria.Model;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,4 +34,9 @@ public class JefeInventario {
     private String correo;
     private String telefono;
     private String clave;
+
+    /* Relacion de JefeInventario con InventarioMedicamento */
+    @OneToOne(mappedBy = "jefeInventario", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private InventarioMedicamento inventario;
 }
