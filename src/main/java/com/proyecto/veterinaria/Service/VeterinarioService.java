@@ -26,7 +26,7 @@ public class VeterinarioService {
     }
 
     // Guardar (lo crea el admin)
-    public Veterinario guardar(Veterinario veterinario) {C
+    public Veterinario guardar(Veterinario veterinario) {
 
         if (veterinario.getNombre() == null || veterinario.getNombre().isEmpty()) {
             throw new RuntimeException("El nombre es obligatorio");

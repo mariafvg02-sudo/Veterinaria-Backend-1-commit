@@ -49,6 +49,5 @@ public class HistorialMedico {
     @JoinColumn(name = "vet_id")
     private Veterinario veterinario;
 
-    @Column(name = "auxi_id")
-    private Integer auxiId;
+   
 }
