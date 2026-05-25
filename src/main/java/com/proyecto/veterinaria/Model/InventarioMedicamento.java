@@ -13,31 +13,30 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name="inventario_medicamento")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"jefeInventario", "medicamentos"})
 public class InventarioMedicamento {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idInventarioMedicamento;
+    private Long idInventarioMedicamento;
     
     private String categoria;
     
     private int cantidad;
 
     /* Relacion de InventarioMedicamento con JefeInventario */
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "idJefeInventario")
-    private JefeInventario jefeInventario;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_jefe_inventario", nullable = false)
+    private User jefeInventario;
 
     /* Relacion bidireccional de InventarioMedicamento con Medicamento */
     @OneToMany(mappedBy = "inventario", cascade = CascadeType.ALL, orphanRemoval = true)

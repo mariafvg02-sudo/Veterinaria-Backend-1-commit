@@ -11,6 +11,8 @@ import com.proyecto.veterinaria.Repository.Historial_medicoRepository;
 
 @Service
 public class Historial_medicoService {
+// Asegúrate de que el nombre de la clase tenga el guion bajo 
+// para que coincida con lo que el Controller busca.
 
     @Autowired
     private Historial_medicoRepository historialRepository;

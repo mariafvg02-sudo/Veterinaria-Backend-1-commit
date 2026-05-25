@@ -11,21 +11,21 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "historial_medico")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"entradaHistorial", "veterinario"})
 public class HistorialMedico {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "hist_medi_id")
-    private Long histMediId;
+    @Column(name = "id_historial_medico")
+    private Long idHistorialMedico;
 
     @Column(name = "fecha")
     private LocalDate fecha;
@@ -41,13 +41,12 @@ public class HistorialMedico {
 
     /* Relación: Un historial médico pertenece a una entrada de historial */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "ent_hist_id")
+    @JoinColumn(name = "id_entrada_historial", nullable = false)
     private EntradaHistorial entradaHistorial;
 
-    /* Relación: Un historial médico está asociado a un veterinario */
+    /* Relación: Un historial médico está asociado a un veterinario (usuario con rol VETERINARIO) */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "vet_id")
-    private Veterinario veterinario;
+    @JoinColumn(name = "id_veterinario", nullable = false)
+    private User veterinario;
 
-   
 }

@@ -1,16 +1,16 @@
 package com.proyecto.veterinaria.Model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "pago")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = "factura")
 public class Pago {
 
     @Id
@@ -22,6 +22,6 @@ public class Pago {
     private String estado; // Ejemplo: "COMPLETADO", "ANULADO"
   //Relacón bidireccional de pago con factura 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "factu_id")
+    @JoinColumn(name = "id_factura", nullable = false)
     private Factura factura;
 }

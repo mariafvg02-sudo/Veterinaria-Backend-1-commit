@@ -1,0 +1,12 @@
+package com.proyecto.veterinaria.Model;
+
+public enum Permission {
+    GESTION_USUARIOS,
+    GESTION_INVENTARIO,
+    GESTION_CITAS,
+    GESTION_FACTURAS,
+    CONSULTA_MASCOTAS,
+    GESTION_CLIENTES,
+    GESTION_HISTORIALES,
+    CONSULTA_MEDICAMENTOS;
+}
