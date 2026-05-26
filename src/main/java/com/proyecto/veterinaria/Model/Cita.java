@@ -31,6 +31,9 @@ public class Cita {
     @Column(name = "id_cita")
     private Long idCita;
 
+    @Column(length = 100)
+    private String nombrePropetario;
+
     @Column(nullable = false)
     private LocalDateTime fecha;
 
