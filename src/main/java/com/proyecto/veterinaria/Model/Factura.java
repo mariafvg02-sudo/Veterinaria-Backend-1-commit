@@ -16,21 +16,21 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name = "factura")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"cita", "pagos"})
 public class Factura {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "factu_id")
-    private Long factuId;
+    @Column(name = "id_factura")
+    private Long idFactura;
 
     @Column(name = "fecha_hora")
     private LocalDateTime fechaHora;
@@ -42,7 +42,7 @@ public class Factura {
     private Float total;
   //Relación bidireccional de factura con cita 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cita_id")
+    @JoinColumn(name = "id_cita", nullable = false)
     private Cita cita;
 
     /* Relación bidireccional con Pagos */

@@ -8,20 +8,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Table(name="mascota")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString(exclude = {"cliente", "veterinario"})
 public class Mascota {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long idMascota;
+    private Long idMascota;
     private String nombre;
     private int edad;
     private double peso;
@@ -30,11 +30,11 @@ public class Mascota {
 
     /* Relación de la mascota con su dueño */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_cliente")
-    private Cliente cliente;
+    @JoinColumn(name = "id_cliente", nullable = false)
+    private User cliente;
 
-    /* Relación de la mascota con su veterinario de cabecera */
+    /* Relación de la mascota con su veterinario de cabecera (usuario con rol VETERINARIO) */
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_veterinario")
-    private Veterinario veterinario;
+    @JoinColumn(name = "id_veterinario", nullable = false)
+    private User veterinario;
 }

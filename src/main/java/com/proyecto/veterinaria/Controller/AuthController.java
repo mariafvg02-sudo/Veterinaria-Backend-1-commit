@@ -21,18 +21,22 @@ public class AuthController {
     }
 
     // =========================
-    // LOGIN
+    // LOGIN (Corregido para coincidir con los campos de Angular)
     // =========================
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(
-            @RequestBody User request) {
+            @RequestBody Map<String, String> credenciales) {
 
         try {
+            // ERROR CORREGIDO: Angular ahora envía 'correo' y 'clave'
+            // Antes intentabas obtener 'email' y 'password', lo cual llegaba nulo.
+            User requestUser = new User();
+            requestUser.setCorreo(credenciales.get("correo"));    
+            requestUser.setClave(credenciales.get("clave"));  
 
-            User user = userService.login(request);
+            User user = userService.login(requestUser);
 
             Map<String, Object> response = new HashMap<>();
-
             response.put("usuario", user);
             response.put("token", "fake-jwt-token");
             response.put("mensaje", "Login exitoso");
@@ -40,18 +44,14 @@ public class AuthController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-
             Map<String, Object> error = new HashMap<>();
-
-            error.put("mensaje",
-                    "Login fallido: " + e.getMessage());
+            error.put("mensaje", "Login fallido: " + e.getMessage());
 
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(error);
         }
     }
-
 
     // =========================
     // REGISTER
@@ -61,11 +61,9 @@ public class AuthController {
             @RequestBody User request) {
 
         try {
-
             String mensaje = userService.register(request);
 
             Map<String, Object> response = new HashMap<>();
-
             response.put("usuario", request);
             response.put("token", "fake-jwt-token");
             response.put("mensaje", mensaje);
@@ -73,11 +71,8 @@ public class AuthController {
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-
             Map<String, Object> error = new HashMap<>();
-
-            error.put("mensaje",
-                    "Registro fallido: " + e.getMessage());
+            error.put("mensaje", "Registro fallido: " + e.getMessage());
 
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
@@ -85,29 +80,25 @@ public class AuthController {
         }
     }
 
-
     // =========================
     // ENVIAR CÓDIGO
     // =========================
     @PostMapping("/forgot-password")
     public ResponseEntity<?> forgotPassword(
-            @RequestBody User request) {
+            @RequestBody Map<String, String> request) { // Cambiado a Map para mayor flexibilidad
 
         try {
-
-            String mensaje = userService
-                    .sendRecoveryCode(request.getCorreo());
+            String correo = request.get("correo");
+            String mensaje = userService.sendRecoveryCode(correo);
 
             return ResponseEntity.ok(mensaje);
 
         } catch (Exception e) {
-
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Error: " + e.getMessage());
         }
     }
-
 
     // =========================
     // VERIFICAR CÓDIGO
@@ -117,41 +108,25 @@ public class AuthController {
             @RequestBody Map<String, String> request) {
 
         try {
-
             String correo = request.get("correo");
             String code = request.get("code");
 
-            System.out.println("========== VERIFY CODE ==========");
-            System.out.println("Correo: " + correo);
-            System.out.println("Code: " + code);
-
-            boolean valid = userService
-                    .verifyCode(correo, code);
-
-            System.out.println("Valid: " + valid);
+            boolean valid = userService.verifyCode(correo, code);
 
             if (valid) {
-
-                return ResponseEntity.ok(
-                        "Código correcto");
-
+                return ResponseEntity.ok("Código correcto");
             } else {
-
                 return ResponseEntity
                         .status(HttpStatus.BAD_REQUEST)
                         .body("Código incorrecto");
             }
 
         } catch (Exception e) {
-
-            e.printStackTrace();
-
             return ResponseEntity
                     .status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("ERROR: " + e.getMessage());
         }
     }
-
 
     // =========================
     // CAMBIAR CONTRASEÑA
@@ -161,17 +136,14 @@ public class AuthController {
             @RequestBody Map<String, String> request) {
 
         try {
-
             String correo = request.get("correo");
             String nuevaClave = request.get("nuevaClave");
 
-            String mensaje = userService
-                    .resetPassword(correo, nuevaClave);
+            String mensaje = userService.resetPassword(correo, nuevaClave);
 
             return ResponseEntity.ok(mensaje);
 
         } catch (Exception e) {
-
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("Error: " + e.getMessage());

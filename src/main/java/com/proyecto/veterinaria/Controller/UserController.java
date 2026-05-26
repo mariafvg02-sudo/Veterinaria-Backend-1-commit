@@ -1,6 +1,8 @@
 package com.proyecto.veterinaria.Controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,46 +15,54 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.proyecto.veterinaria.Model.Recepcionista;
-import com.proyecto.veterinaria.Service.RecepcionistaService;
+import com.proyecto.veterinaria.Model.User;
+import com.proyecto.veterinaria.Service.UserService;
 
 @RestController
-@RequestMapping("/api/recepcionistas")
-public class RecepcionistaController {
+@RequestMapping("/api/users")
+public class UserController {
 
     @Autowired
-    private RecepcionistaService recepcionistaService;
+    private UserService userService;
 
     @GetMapping
-    public List<Recepcionista> listar() {
-        return recepcionistaService.listarTodos();
+    public List<User> listarUsuarios() {
+        return userService.listarTodos();
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Recepcionista> obtenerPorId(@PathVariable Long id) {
-        return recepcionistaService.obtenerPorId(id)
+    public ResponseEntity<User> obtenerUsuario(@PathVariable Long id) {
+        return userService.obtenerPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Recepcionista> crear(@RequestBody Recepcionista recepcionista) {
-        return ResponseEntity.ok(recepcionistaService.crearRecepcionista(recepcionista));
+    public ResponseEntity<?> crearUsuario(@RequestBody User usuario) {
+        try {
+            User nuevoUsuario = userService.crearUsuario(usuario);
+            return ResponseEntity.ok(nuevoUsuario);
+        } catch (RuntimeException e) {
+            Map<String, String> error = new HashMap<>();
+            error.put("mensaje", e.getMessage());
+            return ResponseEntity.badRequest().body(error);
+        }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Recepcionista> actualizar(@PathVariable Long id, @RequestBody Recepcionista detalles) {
+    public ResponseEntity<User> actualizarUsuario(@PathVariable Long id, @RequestBody User detalles) {
         try {
-            return ResponseEntity.ok(recepcionistaService.actualizarRecepcionista(id, detalles));
+            User actualizado = userService.actualizarUsuario(id, detalles);
+            return ResponseEntity.ok(actualizado);
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
+    public ResponseEntity<Void> eliminarUsuario(@PathVariable Long id) {
         try {
-            recepcionistaService.eliminarRecepcionista(id);
+            userService.eliminarUsuario(id);
             return ResponseEntity.noContent().build();
         } catch (RuntimeException e) {
             return ResponseEntity.notFound().build();
