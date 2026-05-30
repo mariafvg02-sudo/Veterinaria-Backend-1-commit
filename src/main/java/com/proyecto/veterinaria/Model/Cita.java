@@ -40,29 +40,40 @@ public class Cita {
     @Column(name = "estado", nullable = false, length = 50)
     private String estado;
 
-   
+    @Column(length = 500)
+    private String observacionCancelacion;
+
+    @Column(length = 1000)
+    private String diagnostico;
+
+    @Column(length = 1000)
+    private String tratamiento;
 
     // --- Relaciones ---
 
     /* Relación con el Cliente (Dueño de la mascota) */
-    // Usamos EAGER y evitamos problemas de serialización con las propiedades de Hibernate
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "id_cliente", nullable = false)
     private User cliente;
 
-    /* Relación con el Recepcionista que agendó */
-    // Lo cambié a nullable = true por si el cliente agenda solo desde la web en el futuro
+    /* Relación con el Recepcionista que asignó la cita */
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "id_recepcionista", nullable = true)
     private User recepcionista;
 
-    /* NUEVA: Relación con el Veterinario asignado (Usando la clase User) */
+    /* Veterinario asignado — nullable hasta que se asigne */
     @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
-    @JoinColumn(name = "id_veterinario", nullable = false)
+    @JoinColumn(name = "id_veterinario", nullable = true)
     private User veterinario;
+
+    /* Mascota asociada a la cita */
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cliente", "veterinario"})
+    @JoinColumn(name = "id_mascota", nullable = true)
+    private Mascota mascota;
 
     /* Relación bidireccional con Factura */
     @OneToOne(mappedBy = "cita", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

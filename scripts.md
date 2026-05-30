@@ -56,11 +56,11 @@ curl -X POST 'http://localhost:8080/api/auth/register' \
   -H 'Content-Type: application/json' \
   -H 'Authorization: Bearer <token>' \
   --data-raw '{
-    "nombre": "maria",
-    "correo": "maria@correo.com",
-    "clave": "123456",
-    "telefono": "123456",
-    "documentoIdentidad": 123456,
+    "nombre": "Recepcionista",
+    "correo": "recepcionista@correo.com",
+    "clave": "12345612",
+    "telefono": "12345612",
+    "documentoIdentidad": 12345612,
     "direccion": "Calle Principal #123",
     "rol": "RECEPCIONISTA"
   }'

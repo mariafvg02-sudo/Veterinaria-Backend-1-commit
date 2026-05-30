@@ -35,7 +35,12 @@ public class CitaController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-    @PostMapping
+    @GetMapping("/usuario/{clienteId}")
+    public List<Cita> obtenerPorCliente(@PathVariable Long clienteId) {
+        return citaService.obtenerPorCliente(clienteId);
+    }
+
+    @PostMapping("/agendar")
     public ResponseEntity<Cita> agendar(@RequestBody Cita cita) {
         return ResponseEntity.ok(citaService.agendarCita(cita));
     }
