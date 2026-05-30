@@ -37,4 +37,14 @@ public class CitaService {
             return citaRepository.save(cita);
         }).orElseThrow(() -> new RuntimeException("Cita no encontrada"));
     }
+
+    public Cita actualizarCita(Long id, Cita citaNueva) {
+    return citaRepository.findById(id).map(cita -> {
+        cita.setFecha(citaNueva.getFecha());
+        cita.setMotivo(citaNueva.getMotivo());
+        cita.setEstado(citaNueva.getEstado());
+        cita.setCliente(citaNueva.getCliente());
+        return citaRepository.save(cita);
+    }).orElseThrow(() -> new RuntimeException("Cita no encontrada"));
+}
 }

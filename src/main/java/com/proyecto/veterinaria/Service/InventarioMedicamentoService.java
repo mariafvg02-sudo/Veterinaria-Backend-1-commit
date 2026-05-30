@@ -31,6 +31,9 @@ public class InventarioMedicamentoService {
         return inventarioMedicamentoRepository.findById(id).map(i -> {
             i.setCategoria(detalles.getCategoria());
             i.setCantidad(detalles.getCantidad());
+            // Actualizar nuevos campos
+            i.setNombre(detalles.getNombre());
+            i.setPrecio(detalles.getPrecio());
             return inventarioMedicamentoRepository.save(i);
         }).orElseThrow(() -> new RuntimeException("Inventario no encontrado con ID: " + id));
     }

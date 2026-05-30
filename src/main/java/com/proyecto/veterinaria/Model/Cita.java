@@ -31,17 +31,16 @@ public class Cita {
     @Column(name = "id_cita")
     private Long idCita;
 
-    @Column(length = 100)
-    private String nombrePropetario;
-
-    @Column(nullable = false)
+    @Column(name = "fecha", nullable = false)
     private LocalDateTime fecha;
 
-    @Column(length = 500)
+    @Column(name = "motivo", length = 500)
     private String motivo;
 
-    @Column(nullable = false, length = 50)
+    @Column(name = "estado", nullable = false, length = 50)
     private String estado;
+
+   
 
     // --- Relaciones ---
 
