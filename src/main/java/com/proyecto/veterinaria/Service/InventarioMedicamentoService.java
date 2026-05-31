@@ -8,12 +8,16 @@ import org.springframework.stereotype.Service;
 
 import com.proyecto.veterinaria.Model.InventarioMedicamento;
 import com.proyecto.veterinaria.Repository.InventarioMedicamentoRepository;
+import com.proyecto.veterinaria.Repository.UserRepository;
 
 @Service
 public class InventarioMedicamentoService {
 
     @Autowired
     private InventarioMedicamentoRepository inventarioMedicamentoRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public List<InventarioMedicamento> listarTodos() {
         return inventarioMedicamentoRepository.findAll();
@@ -24,6 +28,9 @@ public class InventarioMedicamentoService {
     }
 
     public InventarioMedicamento crearInventario(InventarioMedicamento inventario) {
+        if (inventario.getJefeInventario() != null && inventario.getJefeInventario().getId() != null) {
+            inventario.setJefeInventario(userRepository.getReferenceById(inventario.getJefeInventario().getId()));
+        }
         return inventarioMedicamentoRepository.save(inventario);
     }
 
@@ -31,9 +38,11 @@ public class InventarioMedicamentoService {
         return inventarioMedicamentoRepository.findById(id).map(i -> {
             i.setCategoria(detalles.getCategoria());
             i.setCantidad(detalles.getCantidad());
-            // Actualizar nuevos campos
             i.setNombre(detalles.getNombre());
             i.setPrecio(detalles.getPrecio());
+            if (detalles.getJefeInventario() != null && detalles.getJefeInventario().getId() != null) {
+                i.setJefeInventario(userRepository.getReferenceById(detalles.getJefeInventario().getId()));
+            }
             return inventarioMedicamentoRepository.save(i);
         }).orElseThrow(() -> new RuntimeException("Inventario no encontrado con ID: " + id));
     }
