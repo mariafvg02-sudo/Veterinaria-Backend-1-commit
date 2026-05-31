@@ -14,4 +14,5 @@ public interface CitaRepository extends JpaRepository<Cita, Long> {
     Optional<Cita> findByFecha(LocalDateTime fecha);
     Optional<Cita> findByMotivo(String motivo);
     List<Cita> findByCliente_Id(Long clienteId);
+    List<Cita> findByVeterinario_Id(Long veterinarioId);
 }

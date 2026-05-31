@@ -37,6 +37,10 @@ public class CitaService {
         return citaRepository.findByCliente_Id(clienteId);
     }
 
+    public List<Cita> obtenerPorVeterinario(Long veterinarioId) {
+        return citaRepository.findByVeterinario_Id(veterinarioId);
+    }
+
     public Cita agendarCita(Cita cita) {
         // Resolver el cliente desde la BD para evitar entidad no gestionada
         if (cita.getCliente() != null && cita.getCliente().getId() != null) {
