@@ -40,9 +40,9 @@ public class CitaController {
         return citaService.obtenerPorCliente(clienteId);
     }
 
-    @GetMapping("/veterinario/{vetId}")
-    public List<Cita> obtenerPorVeterinario(@PathVariable Long vetId) {
-        return citaService.obtenerPorVeterinario(vetId);
+    @GetMapping("/veterinario/{veterinarioId}")
+    public List<Cita> obtenerPorVeterinario(@PathVariable Long veterinarioId) {
+        return citaService.obtenerPorVeterinario(veterinarioId);
     }
 
     @PostMapping("/agendar")

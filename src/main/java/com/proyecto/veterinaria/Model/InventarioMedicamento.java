@@ -4,6 +4,7 @@ import java.util.List;
 import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -43,6 +44,7 @@ public class InventarioMedicamento {
     /* Relacion de InventarioMedicamento con JefeInventario */
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_jefe_inventario", nullable = false)
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User jefeInventario;
 
     /* Relacion bidireccional de InventarioMedicamento con Medicamento */
