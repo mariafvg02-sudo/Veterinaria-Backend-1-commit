@@ -1,6 +1,7 @@
 package com.proyecto.veterinaria.Model;
 
 import java.util.List;
+import java.math.BigDecimal;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,6 +33,12 @@ public class InventarioMedicamento {
     private String categoria;
     
     private int cantidad;
+
+    // Nuevo: nombre del inventario o referencia breve
+    private String nombre;
+
+    // Nuevo: precio unitario aproximado asociado al inventario
+    private BigDecimal precio;
 
     /* Relacion de InventarioMedicamento con JefeInventario */
     @ManyToOne(fetch = FetchType.LAZY)
