@@ -40,6 +40,11 @@ public class CitaController {
         return citaService.obtenerPorCliente(clienteId);
     }
 
+    @GetMapping("/veterinario/{vetId}")
+    public List<Cita> obtenerPorVeterinario(@PathVariable Long vetId) {
+        return citaService.obtenerPorVeterinario(vetId);
+    }
+
     @PostMapping("/agendar")
     public ResponseEntity<Cita> agendar(@RequestBody Cita cita) {
         return ResponseEntity.ok(citaService.agendarCita(cita));
