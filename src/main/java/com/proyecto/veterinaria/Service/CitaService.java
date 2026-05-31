@@ -54,9 +54,19 @@ public class CitaService {
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada con id: " + cita.getMascota().getIdMascota()));
             cita.setMascota(mascota);
         }
-        cita.setEstado("pendiente");
-        cita.setVeterinario(null);
-        cita.setRecepcionista(null);
+        // Resolver veterinario desde la BD
+        if (cita.getVeterinario() != null && cita.getVeterinario().getId() != null) {
+            User veterinario = userRepository.findById(cita.getVeterinario().getId())
+                .orElseThrow(() -> new RuntimeException("Veterinario no encontrado con id: " + cita.getVeterinario().getId()));
+            cita.setVeterinario(veterinario);
+        }
+        // Resolver recepcionista desde la BD
+        if (cita.getRecepcionista() != null && cita.getRecepcionista().getId() != null) {
+            User recepcionista = userRepository.findById(cita.getRecepcionista().getId())
+                .orElseThrow(() -> new RuntimeException("Recepcionista no encontrado con id: " + cita.getRecepcionista().getId()));
+            cita.setRecepcionista(recepcionista);
+        }
+        cita.setEstado(cita.getVeterinario() != null ? "asignada" : "pendiente");
         return citaRepository.save(cita);
     }
 
