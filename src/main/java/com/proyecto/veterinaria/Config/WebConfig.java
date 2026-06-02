@@ -13,10 +13,13 @@ public class WebConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/api/**") // Aplica a todas las rutas que empiecen con /api
-                        .allowedOrigins("http://localhost:4200") // El puerto de tu Angular
-                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // Métodos permitidos
-                        .allowedHeaders("*") // Permite todos los encabezados
+                registry.addMapping("/api/**")
+                        .allowedOrigins(
+                            "http://localhost:4200",
+                            "https://veterinaria-frontend-tau.vercel.app"
+                        )
+                        .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH")
+                        .allowedHeaders("*")
                         .allowCredentials(true);
             }
         };
