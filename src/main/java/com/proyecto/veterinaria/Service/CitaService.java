@@ -106,10 +106,6 @@ public class CitaService {
         citaRepository.deleteById(id);
     }
 
-    public List<Cita> obtenerPorVeterinario(Long veterinarioId) {
-        return citaRepository.findByVeterinario_Id(veterinarioId);
-    }
-
     public Cita actualizarEstado(Long id, String nuevoEstado) {
         return citaRepository.findById(id).map(cita -> {
             cita.setEstado(nuevoEstado);
