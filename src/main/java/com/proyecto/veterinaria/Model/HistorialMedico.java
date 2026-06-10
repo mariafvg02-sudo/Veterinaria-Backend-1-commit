@@ -1,6 +1,7 @@
 package com.proyecto.veterinaria.Model;
-
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -11,7 +12,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "historial_medico")
@@ -19,7 +23,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"entradaHistorial", "veterinario"})
+// ... getter, setter, etc
 public class HistorialMedico {
 
     @Id
@@ -30,23 +34,34 @@ public class HistorialMedico {
     @Column(name = "fecha")
     private LocalDate fecha;
 
-    @Column(name = "diagnostico", length = 400)
+    // CAMBIO 1: Usar columnDefinition = "TEXT" para que no haya límite de caracteres
+    @Column(name = "diagnostico", columnDefinition = "TEXT")
     private String diagnostico;
 
-    @Column(name = "tratamiento", length = 400)
+    @Column(name = "motivo", columnDefinition = "TEXT")
+    private String motivo;
+
+    @Column(name = "tratamiento", columnDefinition = "TEXT")
     private String tratamiento;
 
-    @Column(name = "nombreVet", length = 30)
-    private String nombreVet;
-
-    /* Relación: Un historial médico pertenece a una entrada de historial */
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "id_entrada_historial", nullable = false)
-    private EntradaHistorial entradaHistorial;
-
-    /* Relación: Un historial médico está asociado a un veterinario (usuario con rol VETERINARIO) */
+    // CAMBIO 2: Agregar @JsonIgnoreProperties para evitar el error de serialización
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_veterinario", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private User veterinario;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cita", nullable = true)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Cita cita;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_cliente", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private User cliente;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "idMascota", nullable = false)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private Mascota mascota;
 }

@@ -12,7 +12,7 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString(exclude = {"citasComoCliente", "citasComoRecepcionista", "mascotas", "entradasHistorial", "historialesMedicos", "inventariosMedicamento"})
+@ToString(exclude = {"citasComoCliente", "citasComoRecepcionista", "mascotas", "historialesMedicos", "inventariosMedicamento"})
 public class User {
 
     @Id
@@ -56,10 +56,7 @@ public class User {
     @JsonIgnore
     private List<Cita> citasComoRecepcionista;
 
-    // --- Relaciones Específicas del Rol: VETERINARIO ---
-    @OneToMany(mappedBy = "veterinario", fetch = FetchType.LAZY)
-    @JsonIgnore
-    private List<EntradaHistorial> entradasHistorial;
+
 
     @OneToMany(mappedBy = "veterinario", fetch = FetchType.LAZY)
     @JsonIgnore
