@@ -47,8 +47,5 @@ public class InventarioMedicamento {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User jefeInventario;
 
-    /* Relacion bidireccional de InventarioMedicamento con Medicamento */
-    @OneToMany(mappedBy = "inventario", cascade = CascadeType.ALL, orphanRemoval = true)
-    @JsonIgnore
-    private List<Medicamento> medicamentos;
+
 }

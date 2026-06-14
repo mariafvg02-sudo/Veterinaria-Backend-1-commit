@@ -40,7 +40,6 @@ Proveer el backend de un sistema de información veterinaria que permita adminis
 | **Mascotas** (`Mascota`) | CRUD de mascotas asociadas a propietarios |
 | **Citas** (`Cita`) | Programación y seguimiento de citas veterinarias |
 | **Historial Médico** (`HistorialMedico`) | Registro del historial clínico por mascota |
-| **Entradas de Historial** (`EntradaHistorial`) | Notas y registros individuales dentro del historial médico |
 | **Medicamentos** (`Medicamento`) | Catálogo de medicamentos disponibles |
 | **Inventario de Medicamentos** (`InventarioMedicamento`) | Control de stock y disponibilidad de medicamentos |
 | **Facturas** (`Factura`) | Generación y consulta de facturas por servicios |
