@@ -9,12 +9,11 @@ import com.proyecto.veterinaria.Model.User;
 import com.proyecto.veterinaria.Repository.MascotaRepository;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 public class MascotaService {
 
     @Autowired
@@ -23,23 +22,29 @@ public class MascotaService {
     @PersistenceContext
     private EntityManager entityManager;
 
+    @Transactional(readOnly = true)
     public List<Mascota> listarTodas() {
-        return mascotaRepository.findAll();
+        return mascotaRepository.findAllWithRelations();
     }
 
+    @Transactional(readOnly = true)
     public Optional<Mascota> obtenerPorId(Long id) {
-        return mascotaRepository.findById(id);
+        return mascotaRepository.findByIdWithRelations(id);
     }
 
+    @Transactional(readOnly = true)
     public List<Mascota> listarPorUsuario(Long usuarioId) {
-        return mascotaRepository.findByCliente_Id(usuarioId);
+        return mascotaRepository.findByClienteIdWithRelations(usuarioId);
     }
 
+    @Transactional
     public Mascota crearMascota(Mascota mascota) {
         asignarRelaciones(mascota);
-        return mascotaRepository.save(mascota);
+        Mascota saved = mascotaRepository.save(mascota);
+        return mascotaRepository.findByIdWithRelations(saved.getIdMascota()).orElse(saved);
     }
 
+    @Transactional
     public Mascota actualizarMascota(Long id, Mascota detalles) {
         Mascota mascota = mascotaRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada"));
@@ -58,9 +63,11 @@ public class MascotaService {
         mascota.setId_cliente(detalles.getId_cliente());
         asignarRelaciones(mascota);
 
-        return mascotaRepository.save(mascota);
+        Mascota saved = mascotaRepository.save(mascota);
+        return mascotaRepository.findByIdWithRelations(saved.getIdMascota()).orElse(saved);
     }
 
+    @Transactional
     public void eliminarMascota(Long id) {
         if (!mascotaRepository.existsById(id)) {
             throw new RuntimeException("Mascota no encontrada");
@@ -79,8 +86,6 @@ public class MascotaService {
             throw new RuntimeException("Cliente no encontrado");
         }
         mascota.setCliente(cliente);
-
-        // No se asigna veterinario aquí: mascota puede crearse sin veterinario
     }
 
     private Long obtenerIdCliente(Mascota mascota) {
@@ -89,6 +94,4 @@ public class MascotaService {
         if (mascota.getId_cliente() != null) return mascota.getId_cliente();
         return null;
     }
-
-    
 }

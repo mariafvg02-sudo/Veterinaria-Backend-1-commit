@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.proyecto.veterinaria.Model.Cita;
 import com.proyecto.veterinaria.Model.Mascota;
@@ -25,51 +26,54 @@ public class CitaService {
     @Autowired
     private MascotaRepository mascotaRepository;
 
+    @Transactional(readOnly = true)
     public List<Cita> listarTodas() {
-        return citaRepository.findAll();
+        return citaRepository.findAllWithRelations();
     }
 
+    @Transactional(readOnly = true)
     public Optional<Cita> obtenerPorId(Long id) {
-        return citaRepository.findById(id);
+        return citaRepository.findByIdWithRelations(id);
     }
 
+    @Transactional(readOnly = true)
     public List<Cita> obtenerPorCliente(Long clienteId) {
-        return citaRepository.findByCliente_Id(clienteId);
+        return citaRepository.findByClienteIdWithRelations(clienteId);
     }
 
+    @Transactional(readOnly = true)
     public List<Cita> obtenerPorVeterinario(Long veterinarioId) {
-        return citaRepository.findByVeterinario_Id(veterinarioId);
+        return citaRepository.findByVeterinarioIdWithRelations(veterinarioId);
     }
 
+    @Transactional
     public Cita agendarCita(Cita cita) {
-        // Resolver el cliente desde la BD para evitar entidad no gestionada
         if (cita.getCliente() != null && cita.getCliente().getId() != null) {
             User cliente = userRepository.findById(cita.getCliente().getId())
                 .orElseThrow(() -> new RuntimeException("Cliente no encontrado con id: " + cita.getCliente().getId()));
             cita.setCliente(cliente);
         }
-        // Resolver mascota desde la BD
         if (cita.getMascota() != null && cita.getMascota().getIdMascota() != null) {
             Mascota mascota = mascotaRepository.findById(cita.getMascota().getIdMascota())
                 .orElseThrow(() -> new RuntimeException("Mascota no encontrada con id: " + cita.getMascota().getIdMascota()));
             cita.setMascota(mascota);
         }
-        // Resolver veterinario desde la BD
         if (cita.getVeterinario() != null && cita.getVeterinario().getId() != null) {
             User veterinario = userRepository.findById(cita.getVeterinario().getId())
                 .orElseThrow(() -> new RuntimeException("Veterinario no encontrado con id: " + cita.getVeterinario().getId()));
             cita.setVeterinario(veterinario);
         }
-        // Resolver recepcionista desde la BD
         if (cita.getRecepcionista() != null && cita.getRecepcionista().getId() != null) {
             User recepcionista = userRepository.findById(cita.getRecepcionista().getId())
                 .orElseThrow(() -> new RuntimeException("Recepcionista no encontrado con id: " + cita.getRecepcionista().getId()));
             cita.setRecepcionista(recepcionista);
         }
         cita.setEstado(cita.getVeterinario() != null ? "asignada" : "pendiente");
-        return citaRepository.save(cita);
+        Cita saved = citaRepository.save(cita);
+        return citaRepository.findByIdWithRelations(saved.getIdCita()).orElse(saved);
     }
 
+    @Transactional
     public Cita actualizarCita(Long id, Cita citaData) {
         return citaRepository.findById(id).map(cita -> {
             if (citaData.getEstado() != null) {
@@ -98,18 +102,22 @@ public class CitaService {
                 userRepository.findById(citaData.getRecepcionista().getId())
                     .ifPresent(cita::setRecepcionista);
             }
-            return citaRepository.save(cita);
+            Cita saved = citaRepository.save(cita);
+            return citaRepository.findByIdWithRelations(saved.getIdCita()).orElse(saved);
         }).orElseThrow(() -> new RuntimeException("Cita no encontrada: " + id));
     }
 
+    @Transactional
     public void cancelarCita(Long id) {
         citaRepository.deleteById(id);
     }
 
+    @Transactional
     public Cita actualizarEstado(Long id, String nuevoEstado) {
         return citaRepository.findById(id).map(cita -> {
             cita.setEstado(nuevoEstado);
-            return citaRepository.save(cita);
+            Cita saved = citaRepository.save(cita);
+            return citaRepository.findByIdWithRelations(saved.getIdCita()).orElse(saved);
         }).orElseThrow(() -> new RuntimeException("Cita no encontrada"));
     }
 

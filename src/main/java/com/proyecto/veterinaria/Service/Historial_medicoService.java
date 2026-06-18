@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.proyecto.veterinaria.Model.HistorialMedico;
 import com.proyecto.veterinaria.Repository.Historial_medicoRepository;
@@ -17,37 +18,40 @@ public class Historial_medicoService {
     @Autowired
     private Historial_medicoRepository historialRepository;
 
-    // Obtener todos los historiales
+    @Transactional(readOnly = true)
     public List<HistorialMedico> obtenerTodos() {
-        return historialRepository.findAll();
+        return historialRepository.findAllWithRelations();
     }
 
-    // Obtener historial por ID
+    @Transactional(readOnly = true)
     public Optional<HistorialMedico> obtenerPorId(Long id) {
-        return historialRepository.findById(id);
+        return historialRepository.findByIdWithRelations(id);
     }
 
-    // Guardar o actualizar historial
+    @Transactional
     public HistorialMedico guardar(HistorialMedico historial) {
-        return historialRepository.save(historial);
+        HistorialMedico saved = historialRepository.save(historial);
+        return historialRepository.findByIdWithRelations(saved.getIdHistorialMedico()).orElse(saved);
     }
 
+    @Transactional
     public HistorialMedico actualizar(Long id, HistorialMedico detalles) {
         return historialRepository.findById(id).map(h -> {
             h.setFecha(detalles.getFecha());
             h.setDiagnostico(detalles.getDiagnostico());
             h.setTratamiento(detalles.getTratamiento());
             h.setMotivo(detalles.getMotivo());
-          
+
             h.setVeterinario(detalles.getVeterinario());
             h.setCita(detalles.getCita());
             h.setCliente(detalles.getCliente());
             h.setMascota(detalles.getMascota());
-            return historialRepository.save(h);
+            HistorialMedico saved = historialRepository.save(h);
+            return historialRepository.findByIdWithRelations(saved.getIdHistorialMedico()).orElse(saved);
         }).orElseThrow(() -> new RuntimeException("Historial no encontrado"));
     }
 
-    // Eliminar historial
+    @Transactional
     public void eliminar(Long id) {
         if (!historialRepository.existsById(id)) {
             throw new RuntimeException("Historial médico no encontrado");

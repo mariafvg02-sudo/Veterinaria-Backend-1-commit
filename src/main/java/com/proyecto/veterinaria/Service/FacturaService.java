@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.proyecto.veterinaria.Model.Factura;
 import com.proyecto.veterinaria.Repository.FacturaRepository;
@@ -15,32 +16,35 @@ public class FacturaService {
     @Autowired
     private FacturaRepository facturaRepository;
 
-    // Listar todas las facturas
+    @Transactional(readOnly = true)
     public List<Factura> obtenerTodos() {
-        return facturaRepository.findAll();
+        return facturaRepository.findAllWithRelations();
     }
 
-    // Obtener factura por ID
+    @Transactional(readOnly = true)
     public Optional<Factura> obtenerPorId(Long id) {
-        return facturaRepository.findById(id);
+        return facturaRepository.findByIdWithRelations(id);
     }
 
-    // Guardar o actualizar factura
+    @Transactional
     public Factura guardar(Factura factura) {
-        return facturaRepository.save(factura);
+        Factura saved = facturaRepository.save(factura);
+        return facturaRepository.findByIdWithRelations(saved.getIdFactura()).orElse(saved);
     }
 
+    @Transactional
     public Factura actualizar(Long id, Factura detalles) {
         return facturaRepository.findById(id).map(f -> {
             f.setFechaHora(detalles.getFechaHora());
             f.setEstado(detalles.getEstado());
             f.setTotal(detalles.getTotal());
             f.setCita(detalles.getCita());
-            return facturaRepository.save(f);
+            Factura saved = facturaRepository.save(f);
+            return facturaRepository.findByIdWithRelations(saved.getIdFactura()).orElse(saved);
         }).orElseThrow(() -> new RuntimeException("Factura no encontrada"));
     }
 
-    // Eliminar factura
+    @Transactional
     public void eliminar(Long id) {
         if (!facturaRepository.existsById(id)) {
             throw new RuntimeException("Factura no encontrada");

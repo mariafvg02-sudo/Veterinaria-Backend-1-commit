@@ -4,6 +4,7 @@ import com.proyecto.veterinaria.Model.Pago;
 import com.proyecto.veterinaria.Repository.PagoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,39 +15,40 @@ public class PagoService {
     @Autowired
     private PagoRepository pagoRepository;
 
-    // Obtener todos los pagos
+    @Transactional(readOnly = true)
     public List<Pago> obtenerTodos() {
-        return pagoRepository.findAll();
+        return pagoRepository.findAllWithRelations();
     }
 
-    // Obtener pago por ID
+    @Transactional(readOnly = true)
     public Optional<Pago> obtenerPorId(Long id) {
-        return pagoRepository.findById(id);
+        return pagoRepository.findByIdWithRelations(id);
     }
 
-    // Guardar o actualizar pago
+    @Transactional
     public Pago guardar(Pago pago) {
         if (pago.getEstado() == null) {
             pago.setEstado("COMPLETADO");
         }
-        return pagoRepository.save(pago);
+        Pago saved = pagoRepository.save(pago);
+        return pagoRepository.findByIdWithRelations(saved.getIdPago()).orElse(saved);
     }
 
-    // En pagos, usualmente solo permitimos actualizar el método si hubo error, 
-    // pero rara vez el monto. Aquí restringimos un poco.
+    @Transactional
     public Pago actualizar(Long id, Pago detalles) {
         return pagoRepository.findById(id).map(pagoExistente -> {
-            // Solo permitimos cambiar el método, no el monto por seguridad
             pagoExistente.setMetodo(detalles.getMetodo());
-            return pagoRepository.save(pagoExistente);
+            Pago saved = pagoRepository.save(pagoExistente);
+            return pagoRepository.findByIdWithRelations(saved.getIdPago()).orElse(saved);
         }).orElseThrow(() -> new RuntimeException("Pago no encontrado con ID: " + id));
     }
 
-    // Cambiamos eliminar por anular
+    @Transactional
     public Pago anular(Long id) {
         return pagoRepository.findById(id).map(pago -> {
             pago.setEstado("ANULADO");
-            return pagoRepository.save(pago);
+            Pago saved = pagoRepository.save(pago);
+            return pagoRepository.findByIdWithRelations(saved.getIdPago()).orElse(saved);
         }).orElseThrow(() -> new RuntimeException("Pago no encontrado para anular"));
     }
 }

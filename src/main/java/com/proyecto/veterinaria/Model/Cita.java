@@ -13,11 +13,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import lombok.*;
 
 @Entity
-@Table(name = "cita")
+@Table(name = "cita", indexes = {
+    @Index(name = "idx_cita_cliente", columnList = "id_cliente"),
+    @Index(name = "idx_cita_veterinario", columnList = "id_veterinario"),
+    @Index(name = "idx_cita_recepcionista", columnList = "id_recepcionista"),
+    @Index(name = "idx_cita_estado", columnList = "estado")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -52,25 +58,25 @@ public class Cita {
     // --- Relaciones ---
 
     /* Relación con el Cliente (Dueño de la mascota) */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "id_cliente", nullable = false)
     private User cliente;
 
     /* Relación con el Recepcionista que asignó la cita */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "id_recepcionista", nullable = true)
     private User recepcionista;
 
     /* Veterinario asignado — nullable hasta que se asigne */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JoinColumn(name = "id_veterinario", nullable = true)
     private User veterinario;
 
     /* Mascota asociada a la cita */
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler", "cliente", "veterinario"})
     @JoinColumn(name = "id_mascota", nullable = true)
     private Mascota mascota;

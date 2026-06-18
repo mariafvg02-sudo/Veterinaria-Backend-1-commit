@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.proyecto.veterinaria.Model.InventarioMedicamento;
 import com.proyecto.veterinaria.Repository.InventarioMedicamentoRepository;
@@ -19,10 +20,12 @@ public class InventarioMedicamentoService {
     @Autowired
     private UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     public List<InventarioMedicamento> listarTodos() {
         return inventarioMedicamentoRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public Optional<InventarioMedicamento> obtenerPorId(Long id) {
         return inventarioMedicamentoRepository.findById(id);
     }

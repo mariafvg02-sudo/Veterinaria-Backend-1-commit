@@ -10,7 +10,7 @@ import com.proyecto.veterinaria.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import com.proyecto.veterinaria.Model.Rol;
 
@@ -80,14 +80,17 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
     public List<User> listarTodos() {
         return userRepository.findAll();
     }
 
+    @Transactional(readOnly = true)
     public List<User> listarPorRol(Rol rol) {
         return userRepository.findByRol(rol);
     }
 
+    @Transactional(readOnly = true)
     public Optional<User> obtenerPorId(Long id) {
         return userRepository.findById(id);
     }
