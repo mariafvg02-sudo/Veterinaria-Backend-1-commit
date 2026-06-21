@@ -31,4 +31,24 @@ public interface Historial_medicoRepository extends JpaRepository<HistorialMedic
            "LEFT JOIN FETCH c.mascota cm LEFT JOIN FETCH cm.cliente " +
            "WHERE h.idHistorialMedico = :id")
     Optional<HistorialMedico> findByIdWithRelations(@Param("id") Long id);
+
+    @Query("SELECT h FROM HistorialMedico h " +
+           "LEFT JOIN FETCH h.veterinario " +
+           "LEFT JOIN FETCH h.cliente " +
+           "LEFT JOIN FETCH h.mascota m LEFT JOIN FETCH m.cliente " +
+           "LEFT JOIN FETCH h.cita c LEFT JOIN FETCH c.cliente " +
+           "LEFT JOIN FETCH c.recepcionista LEFT JOIN FETCH c.veterinario " +
+           "LEFT JOIN FETCH c.mascota cm LEFT JOIN FETCH cm.cliente " +
+           "WHERE h.cliente.id = :clienteId")
+    List<HistorialMedico> findByClienteIdWithRelations(@Param("clienteId") Long clienteId);
+
+    @Query("SELECT h FROM HistorialMedico h " +
+           "LEFT JOIN FETCH h.veterinario " +
+           "LEFT JOIN FETCH h.cliente " +
+           "LEFT JOIN FETCH h.mascota m LEFT JOIN FETCH m.cliente " +
+           "LEFT JOIN FETCH h.cita c LEFT JOIN FETCH c.cliente " +
+           "LEFT JOIN FETCH c.recepcionista LEFT JOIN FETCH c.veterinario " +
+           "LEFT JOIN FETCH c.mascota cm LEFT JOIN FETCH cm.cliente " +
+           "WHERE h.mascota.idMascota = :mascotaId")
+    List<HistorialMedico> findByMascotaIdWithRelations(@Param("mascotaId") Long mascotaId);
 }

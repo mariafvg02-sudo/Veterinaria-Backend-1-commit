@@ -28,6 +28,16 @@ public class Historial_medicoService {
         return historialRepository.findByIdWithRelations(id);
     }
 
+    @Transactional(readOnly = true)
+    public List<HistorialMedico> obtenerPorCliente(Long clienteId) {
+        return historialRepository.findByClienteIdWithRelations(clienteId);
+    }
+
+    @Transactional(readOnly = true)
+    public List<HistorialMedico> obtenerPorMascota(Long mascotaId) {
+        return historialRepository.findByMascotaIdWithRelations(mascotaId);
+    }
+
     @Transactional
     public HistorialMedico guardar(HistorialMedico historial) {
         HistorialMedico saved = historialRepository.save(historial);

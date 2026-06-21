@@ -37,6 +37,16 @@ public class Historial_medicoController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/cliente/{clienteId}")
+    public List<HistorialMedico> obtenerPorCliente(@PathVariable Long clienteId) {
+        return historialService.obtenerPorCliente(clienteId);
+    }
+
+    @GetMapping("/mascota/{mascotaId}")
+    public List<HistorialMedico> obtenerPorMascota(@PathVariable Long mascotaId) {
+        return historialService.obtenerPorMascota(mascotaId);
+    }
+
     @PostMapping
     public ResponseEntity<HistorialMedico> guardar(@RequestBody HistorialMedico historial) {
         return ResponseEntity.ok(historialService.guardar(historial));
