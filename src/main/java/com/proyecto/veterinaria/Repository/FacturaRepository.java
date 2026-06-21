@@ -25,4 +25,11 @@ public interface FacturaRepository extends JpaRepository<Factura, Long> {
            "LEFT JOIN FETCH c.mascota m LEFT JOIN FETCH m.cliente " +
            "WHERE f.idFactura = :id")
     Optional<Factura> findByIdWithRelations(@Param("id") Long id);
+
+    @Query("SELECT f FROM Factura f " +
+           "LEFT JOIN FETCH f.cita c LEFT JOIN FETCH c.cliente " +
+           "LEFT JOIN FETCH c.recepcionista LEFT JOIN FETCH c.veterinario " +
+           "LEFT JOIN FETCH c.mascota m LEFT JOIN FETCH m.cliente " +
+           "WHERE c.idCita = :citaId")
+    Optional<Factura> findByCitaIdWithRelations(@Param("citaId") Long citaId);
 }

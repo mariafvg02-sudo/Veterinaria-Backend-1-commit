@@ -44,6 +44,11 @@ public class FacturaService {
         }).orElseThrow(() -> new RuntimeException("Factura no encontrada"));
     }
 
+    @Transactional(readOnly = true)
+    public Optional<Factura> obtenerPorCitaId(Long citaId) {
+        return facturaRepository.findByCitaIdWithRelations(citaId);
+    }
+
     @Transactional
     public void eliminar(Long id) {
         if (!facturaRepository.existsById(id)) {

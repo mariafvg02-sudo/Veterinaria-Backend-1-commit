@@ -38,6 +38,13 @@ public class FacturaController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/cita/{citaId}")
+    public ResponseEntity<Factura> obtenerPorCitaId(@PathVariable Long citaId) {
+        return facturaService.obtenerPorCitaId(citaId)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
+    }
+
     // Crear una nueva factura
     @PostMapping
     public ResponseEntity<Factura> guardar(@RequestBody Factura factura) {
